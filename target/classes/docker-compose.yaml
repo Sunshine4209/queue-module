@@ -1,0 +1,26 @@
+
+# a simple tool to emulate sqs locally. From this file location do a `docker-compose up`.
+# make sure the network `zonos` is created before you run a docker up. `docker network create zonos`
+# see https://docs.docker.com/engine/reference/commandline/network_create/
+# create a queue from the terminal: aws sqs create-queue --queue-name=zonos --endpoint-url=http://localhost:4576
+# this assumes you have aws cli tools installed on your computer.
+
+version: '3'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      SERVICES: dynamodb, kinesis, s3, sqs
+    ports:
+      - 4568:4568 # kinesis
+      - 4569:4569 # dynamo
+      - 4572:4572 # s3
+      - 4576:4576 # sqs
+      - 7540:8080 # localstack dashboard
+    container_name: localstack
+
+networks:
+  default:
+    external:
+      name: zonos
