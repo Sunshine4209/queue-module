@@ -93,7 +93,7 @@ public class SQSSimpleJavaClientExample
 
             SqsMessage dequeuedMessage = (SqsMessage)sqsQueue.dequeue();
 
-            if (fetchMessage != null) {
+            if (dequeuedMessage != null) {
                 printMessage(dequeuedMessage);
             }
 
