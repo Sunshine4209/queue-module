@@ -60,8 +60,8 @@ public class SQSSimpleJavaClientExample
             // Creating a message.
             System.out.println("Receiving messages from MyQueue.\n");
             Map<String, String> test = new HashMap<String, String>();
-            test.put("ordderId", "2-1");
-            test.put("someKeyValue", "this is a message 1");
+            test.put("ordderId", "2-122");
+            test.put("someKeyValue", "this is a message 221");
             SqsMessage message = new SqsMessage(test.toString());
             message.addStringMessageAttributes("createdAt", "String", new Date().toString());
 
@@ -70,18 +70,18 @@ public class SQSSimpleJavaClientExample
             sqsQueue.enqueue(message);
 
             // Receive messages.
-            System.out.println("Receiving messages from MyQueue.\n");
-            SqsMessage fetchMessage = (SqsMessage)sqsQueue.fetch();
-
-            if (fetchMessage != null) {
-                System.out.println("Message");
-                System.out.println("  MessageId:     "  + fetchMessage.getId());
-                System.out.println("  Body:          "  + fetchMessage.getPayload());
-                System.out.println("  Message Attribute:          "  + fetchMessage.getMessageAttributes().toString());
-
-                System.out.println("Deleting message " +fetchMessage.getId() + " from MyQueue.\n");
-                sqsQueue.delete(fetchMessage.getId());
-            }
+//            System.out.println("Receiving messages from MyQueue.\n");
+//            SqsMessage fetchMessage = (SqsMessage)sqsQueue.fetch();
+//
+//            if (fetchMessage != null) {
+//                System.out.println("Message");
+//                System.out.println("  MessageId:     "  + fetchMessage.getId());
+//                System.out.println("  Body:          "  + fetchMessage.getPayload());
+//                System.out.println("  Message Attribute:          "  + fetchMessage.getMessageAttributes().toString());
+//
+//                System.out.println("Deleting message " +fetchMessage.getId() + " from MyQueue.\n");
+//                sqsQueue.delete(fetchMessage.getId());
+//            }
 
 
             List<String> attributeNames = new ArrayList<String>();
@@ -94,6 +94,17 @@ public class SQSSimpleJavaClientExample
 
             System.out.println("  size:     " + size);
 
+            SqsMessage fetchMessage = (SqsMessage)sqsQueue.dequeue();
+
+            if (fetchMessage != null) {
+                System.out.println("Message");
+                System.out.println("  MessageId:     "  + fetchMessage.getId());
+                System.out.println("  Body:          "  + fetchMessage.getPayload());
+                System.out.println("  Message Attribute:          "  + fetchMessage.getMessageAttributes().toString());
+            }
+
+
+
 
         } catch (final AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means " +
@@ -104,7 +115,7 @@ public class SQSSimpleJavaClientExample
             System.out.println("AWS Error Code:   " + ase.getErrorCode());
             System.out.println("Error Type:       " + ase.getErrorType());
             System.out.println("Request ID:       " + ase.getRequestId());
-            
+
         } catch (final AmazonClientException ace) {
             System.out.println("Caught an AmazonClientException, which means " +
                     "the client encountered a serious internal problem while " +
