@@ -70,18 +70,15 @@ public class SQSSimpleJavaClientExample
             sqsQueue.enqueue(message);
 
             // Receive messages.
-//            System.out.println("Receiving messages from MyQueue.\n");
-//            SqsMessage fetchMessage = (SqsMessage)sqsQueue.fetch();
-//
-//            if (fetchMessage != null) {
-//                System.out.println("Message");
-//                System.out.println("  MessageId:     "  + fetchMessage.getId());
-//                System.out.println("  Body:          "  + fetchMessage.getPayload());
-//                System.out.println("  Message Attribute:          "  + fetchMessage.getMessageAttributes().toString());
-//
-//                System.out.println("Deleting message " +fetchMessage.getId() + " from MyQueue.\n");
-//                sqsQueue.delete(fetchMessage.getId());
-//            }
+            System.out.println("Receiving messages from MyQueue.\n");
+            SqsMessage fetchMessage = (SqsMessage)sqsQueue.fetch();
+
+            if (fetchMessage != null) {
+                printMessage(fetchMessage);
+
+                System.out.println("Deleting message " +fetchMessage.getId() + " from MyQueue.\n");
+                sqsQueue.delete(fetchMessage.getId());
+            }
 
 
             List<String> attributeNames = new ArrayList<String>();
@@ -94,17 +91,11 @@ public class SQSSimpleJavaClientExample
 
             System.out.println("  size:     " + size);
 
-            SqsMessage fetchMessage = (SqsMessage)sqsQueue.dequeue();
+            SqsMessage dequeuedMessage = (SqsMessage)sqsQueue.dequeue();
 
             if (fetchMessage != null) {
-                System.out.println("Message");
-                System.out.println("  MessageId:     "  + fetchMessage.getId());
-                System.out.println("  Body:          "  + fetchMessage.getPayload());
-                System.out.println("  Message Attribute:          "  + fetchMessage.getMessageAttributes().toString());
+                printMessage(dequeuedMessage);
             }
-
-
-
 
         } catch (final AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means " +
@@ -123,5 +114,13 @@ public class SQSSimpleJavaClientExample
                     "being able to access the network.");
             System.out.println("Error Message: " + ace.getMessage());
         }
+    }
+
+    private static void printMessage(SqsMessage message)
+    {
+        System.out.println("Message");
+        System.out.println("  MessageId:     "  + message.getId());
+        System.out.println("  Body:          "  + message.getPayload());
+        System.out.println("  Message Attribute:          "  + message.getMessageAttributes().toString());
     }
 }
